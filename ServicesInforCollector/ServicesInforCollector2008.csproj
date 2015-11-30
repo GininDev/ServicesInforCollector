@@ -58,35 +58,26 @@
       <HintPath>..\Lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Management" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Web.Extensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Helpers\ConfigHelper.cs" />
-    <Compile Include="Core\Helpers\DictionaryHelper.cs" />
-    <Compile Include="Core\Helpers\FileHelper.cs" />
+    <Compile Include="Core\Base\ControllerBase.cs" />
+    <Compile Include="Core\Controller\DictController.cs" />
+    <Compile Include="Core\Controller\FactController.cs" />
+    <Compile Include="Core\Controller\BizController.cs" />
+    <Compile Include="Core\Controller\SysDefineController.cs" />
+    <Compile Include="Core\Entities\Dicts.cs" />
+    <Compile Include="Core\Entities\Bizs.cs" />
+    <Compile Include="Core\Entities\Facts.cs" />
+    <Compile Include="Core\Entities\SysDefines.cs" />
     <Compile Include="Core\Events\GridDataChangedHandler.cs" />
-    <Compile Include="Core\Helpers\LogHelper.cs" />
-    <Compile Include="Core\Helpers\MessagerHelper.cs" />
-    <Compile Include="Core\Helpers\RegexHelper.cs" />
-    <Compile Include="Core\Helpers\ShellHelper.cs" />
-    <Compile Include="Core\Helpers\StringHelper.cs" />
-    <Compile Include="Core\Entities\WmiServiceObj.cs" />
-    <Compile Include="Core\Helpers\WinServicesHelper.cs" />
-    <Compile Include="Core\Helpers\WorkThreadHelper.cs" />
-    <Compile Include="Core\Helpers\XmlHelper.cs" />
     <Compile Include="FrmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,11 +95,29 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="UiControls\JsonNodeDetail.resx">
+      <DependentUpon>JsonNodeDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UiControls\JsonTree.resx">
+      <DependentUpon>JsonTree.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UiControls\WmiSumInfo.resx">
+      <DependentUpon>WmiSumInfo.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="App.config" />
+    <None Include="Datas\Devices\SzConfig.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Datas\Tmpls\ckReg.bat.tmpl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Datas\Tmpls\ckUnReg.bat.tmpl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -121,14 +130,30 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Core\Helpers\IniDocumentHelper.cs" />
     <Compile Include="Core\Components\SortableGridView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Core\Components\SortableGridView.Designer.cs">
       <DependentUpon>SortableGridView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Core\Components\SortableList.cs" />
+    <Compile Include="UiControls\JsonNodeDetail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UiControls\JsonNodeDetail.Designer.cs">
+      <DependentUpon>JsonNodeDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UiControls\JsonTree.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UiControls\JsonTree.Designer.cs">
+      <DependentUpon>JsonTree.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UiControls\WmiSumInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UiControls\WmiSumInfo.Designer.cs">
+      <DependentUpon>WmiSumInfo.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -163,9 +188,15 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="history.txt" />
     <Content Include="README.txt" />
-    <Content Include="Ref\his.txt" />
     <Content Include="Ref\todo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GininDev.Common.DataTools\GininDev.Common.DataTools.csproj">
+      <Project>{15BCCA58-BCBA-4C13-B401-B58A9796D807}</Project>
+      <Name>GininDev.Common.DataTools</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

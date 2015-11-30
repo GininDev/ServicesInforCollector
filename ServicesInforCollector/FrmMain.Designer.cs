@@ -1,4 +1,5 @@
 ﻿using ServicesInforCollector.Core.Components;
+using ServicesInforCollector.UiControls;
 
 namespace ServicesInforCollector
 {
@@ -54,6 +55,9 @@ namespace ServicesInforCollector
             this.explorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tpText = new System.Windows.Forms.TabPage();
             this.rtbOut = new System.Windows.Forms.RichTextBox();
+            this.tpTree = new System.Windows.Forms.TabPage();
+            this.jsonTree2 = new ServicesInforCollector.UiControls.JsonTree();
+            this.wmiSumInfo1 = new ServicesInforCollector.UiControls.WmiSumInfo();
             this.panel13 = new System.Windows.Forms.Panel();
             this.panel7 = new System.Windows.Forms.Panel();
             this.tbExclude = new System.Windows.Forms.TextBox();
@@ -85,12 +89,14 @@ namespace ServicesInforCollector
             this.tpTextOut = new System.Windows.Forms.TabPage();
             this.tbDirectoryOut = new System.Windows.Forms.TextBox();
             this.tpDiagram = new System.Windows.Forms.TabPage();
+            this.jsonTree1 = new ServicesInforCollector.UiControls.JsonTree();
             this.panel11 = new System.Windows.Forms.Panel();
             this.tbDirecotry = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.panel14 = new System.Windows.Forms.Panel();
             this.btnFolderView = new System.Windows.Forms.Button();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.btnConfig = new System.Windows.Forms.Button();
             this.btnDirectoryWatcher = new System.Windows.Forms.Button();
             this.ofdJson = new System.Windows.Forms.OpenFileDialog();
             this.panel15 = new System.Windows.Forms.Panel();
@@ -108,6 +114,7 @@ namespace ServicesInforCollector
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.tpText.SuspendLayout();
+            this.tpTree.SuspendLayout();
             this.panel13.SuspendLayout();
             this.panel7.SuspendLayout();
             this.panel6.SuspendLayout();
@@ -120,6 +127,7 @@ namespace ServicesInforCollector
             this.tbDs.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tpTextOut.SuspendLayout();
+            this.tpDiagram.SuspendLayout();
             this.panel11.SuspendLayout();
             this.panel14.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -171,6 +179,7 @@ namespace ServicesInforCollector
             // panel19
             // 
             this.panel19.Controls.Add(this.tcMain);
+            this.panel19.Controls.Add(this.wmiSumInfo1);
             this.panel19.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel19.Location = new System.Drawing.Point(0, 50);
             this.panel19.Name = "panel19";
@@ -179,27 +188,26 @@ namespace ServicesInforCollector
             // 
             // tcMain
             // 
-            this.tcMain.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
             this.tcMain.Controls.Add(this.tpGrid);
             this.tcMain.Controls.Add(this.tpText);
+            this.tcMain.Controls.Add(this.tpTree);
             this.tcMain.Cursor = System.Windows.Forms.Cursors.Default;
             this.tcMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tcMain.Location = new System.Drawing.Point(0, 0);
             this.tcMain.Name = "tcMain";
             this.tcMain.RightToLeftLayout = true;
             this.tcMain.SelectedIndex = 0;
-            this.tcMain.Size = new System.Drawing.Size(838, 345);
-            this.tcMain.TabIndex = 3;
-            this.tcMain.TabIndexChanged += new System.EventHandler(this.tcMain_SelectedIndexChanged);
+            this.tcMain.Size = new System.Drawing.Size(658, 345);
+            this.tcMain.TabIndex = 5;
             this.tcMain.SelectedIndexChanged += new System.EventHandler(this.tcMain_SelectedIndexChanged);
             // 
             // tpGrid
             // 
             this.tpGrid.Controls.Add(this.dataGridView1);
-            this.tpGrid.Location = new System.Drawing.Point(4, 25);
+            this.tpGrid.Location = new System.Drawing.Point(4, 22);
             this.tpGrid.Name = "tpGrid";
             this.tpGrid.Padding = new System.Windows.Forms.Padding(3);
-            this.tpGrid.Size = new System.Drawing.Size(830, 316);
+            this.tpGrid.Size = new System.Drawing.Size(650, 319);
             this.tpGrid.TabIndex = 1;
             this.tpGrid.Text = "Grid";
             this.tpGrid.UseVisualStyleBackColor = true;
@@ -212,19 +220,24 @@ namespace ServicesInforCollector
             this.dataGridView1.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Sunken;
+            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(3, 3);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Sunken;
-            this.dataGridView1.RowTemplate.Height = 23;
+            this.dataGridView1.RowTemplate.Height = 20;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(824, 310);
-            this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.ShowCellErrors = false;
+            this.dataGridView1.ShowCellToolTips = false;
+            this.dataGridView1.ShowEditingIcon = false;
+            this.dataGridView1.ShowRowErrors = false;
+            this.dataGridView1.Size = new System.Drawing.Size(644, 313);
+            this.dataGridView1.TabIndex = 2;
             this.dataGridView1.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_ColumnHeaderMouseClick);
+            this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
             // 
             // contextMenuStrip1
             // 
@@ -316,10 +329,10 @@ namespace ServicesInforCollector
             // tpText
             // 
             this.tpText.Controls.Add(this.rtbOut);
-            this.tpText.Location = new System.Drawing.Point(4, 25);
+            this.tpText.Location = new System.Drawing.Point(4, 22);
             this.tpText.Name = "tpText";
             this.tpText.Padding = new System.Windows.Forms.Padding(3);
-            this.tpText.Size = new System.Drawing.Size(830, 316);
+            this.tpText.Size = new System.Drawing.Size(650, 319);
             this.tpText.TabIndex = 0;
             this.tpText.Text = "Text";
             this.tpText.UseVisualStyleBackColor = true;
@@ -329,10 +342,36 @@ namespace ServicesInforCollector
             this.rtbOut.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbOut.Location = new System.Drawing.Point(3, 3);
             this.rtbOut.Name = "rtbOut";
-            this.rtbOut.Size = new System.Drawing.Size(824, 310);
-            this.rtbOut.TabIndex = 0;
+            this.rtbOut.Size = new System.Drawing.Size(644, 313);
+            this.rtbOut.TabIndex = 3;
             this.rtbOut.Text = "";
-            this.rtbOut.KeyUp += new System.Windows.Forms.KeyEventHandler(this.rtbOut_KeyUp);
+            // 
+            // tpTree
+            // 
+            this.tpTree.Controls.Add(this.jsonTree2);
+            this.tpTree.Location = new System.Drawing.Point(4, 22);
+            this.tpTree.Name = "tpTree";
+            this.tpTree.Padding = new System.Windows.Forms.Padding(3);
+            this.tpTree.Size = new System.Drawing.Size(650, 319);
+            this.tpTree.TabIndex = 2;
+            this.tpTree.Text = "Tree";
+            this.tpTree.UseVisualStyleBackColor = true;
+            // 
+            // jsonTree2
+            // 
+            this.jsonTree2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.jsonTree2.Location = new System.Drawing.Point(3, 3);
+            this.jsonTree2.Name = "jsonTree2";
+            this.jsonTree2.Size = new System.Drawing.Size(644, 313);
+            this.jsonTree2.TabIndex = 0;
+            // 
+            // wmiSumInfo1
+            // 
+            this.wmiSumInfo1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.wmiSumInfo1.Location = new System.Drawing.Point(658, 0);
+            this.wmiSumInfo1.Name = "wmiSumInfo1";
+            this.wmiSumInfo1.Size = new System.Drawing.Size(180, 345);
+            this.wmiSumInfo1.TabIndex = 4;
             // 
             // panel13
             // 
@@ -615,6 +654,7 @@ namespace ServicesInforCollector
             this.tabControl2.SelectedIndex = 0;
             this.tabControl2.Size = new System.Drawing.Size(838, 393);
             this.tabControl2.TabIndex = 2;
+            this.tabControl2.SelectedIndexChanged += new System.EventHandler(this.tabControl2_SelectedIndexChanged);
             // 
             // tpTextOut
             // 
@@ -636,10 +676,11 @@ namespace ServicesInforCollector
             this.tbDirectoryOut.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.tbDirectoryOut.Size = new System.Drawing.Size(824, 361);
             this.tbDirectoryOut.TabIndex = 4;
-            this.tbDirectoryOut.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbDirectoryOut_KeyUp_1);
+            this.tbDirectoryOut.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbDirectoryOut_KeyUp);
             // 
             // tpDiagram
             // 
+            this.tpDiagram.Controls.Add(this.jsonTree1);
             this.tpDiagram.Location = new System.Drawing.Point(4, 22);
             this.tpDiagram.Name = "tpDiagram";
             this.tpDiagram.Padding = new System.Windows.Forms.Padding(3);
@@ -647,6 +688,14 @@ namespace ServicesInforCollector
             this.tpDiagram.TabIndex = 1;
             this.tpDiagram.Text = "Diagram";
             this.tpDiagram.UseVisualStyleBackColor = true;
+            // 
+            // jsonTree1
+            // 
+            this.jsonTree1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.jsonTree1.Location = new System.Drawing.Point(3, 3);
+            this.jsonTree1.Name = "jsonTree1";
+            this.jsonTree1.Size = new System.Drawing.Size(824, 361);
+            this.jsonTree1.TabIndex = 1;
             // 
             // panel11
             // 
@@ -665,9 +714,9 @@ namespace ServicesInforCollector
             this.tbDirecotry.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbDirecotry.Location = new System.Drawing.Point(89, 0);
             this.tbDirecotry.Name = "tbDirecotry";
-            this.tbDirecotry.Size = new System.Drawing.Size(583, 21);
+            this.tbDirecotry.Size = new System.Drawing.Size(593, 21);
             this.tbDirecotry.TabIndex = 3;
-            this.tbDirecotry.Text = "E:\\ECD\\数据接收";
+            this.tbDirecotry.Text = "H:\\系统备份\\深圳系统备份\\20151117\\I_app1";
             // 
             // label11
             // 
@@ -683,16 +732,16 @@ namespace ServicesInforCollector
             // 
             this.panel14.Controls.Add(this.btnFolderView);
             this.panel14.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel14.Location = new System.Drawing.Point(672, 0);
+            this.panel14.Location = new System.Drawing.Point(682, 0);
             this.panel14.Name = "panel14";
-            this.panel14.Size = new System.Drawing.Size(62, 29);
+            this.panel14.Size = new System.Drawing.Size(37, 29);
             this.panel14.TabIndex = 1;
             // 
             // btnFolderView
             // 
-            this.btnFolderView.Location = new System.Drawing.Point(16, 1);
+            this.btnFolderView.Location = new System.Drawing.Point(4, 1);
             this.btnFolderView.Name = "btnFolderView";
-            this.btnFolderView.Size = new System.Drawing.Size(34, 23);
+            this.btnFolderView.Size = new System.Drawing.Size(31, 23);
             this.btnFolderView.TabIndex = 0;
             this.btnFolderView.Text = "...";
             this.btnFolderView.UseVisualStyleBackColor = true;
@@ -700,18 +749,29 @@ namespace ServicesInforCollector
             // 
             // panel5
             // 
+            this.panel5.Controls.Add(this.btnConfig);
             this.panel5.Controls.Add(this.btnDirectoryWatcher);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel5.Location = new System.Drawing.Point(734, 0);
+            this.panel5.Location = new System.Drawing.Point(719, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(104, 29);
+            this.panel5.Size = new System.Drawing.Size(119, 29);
             this.panel5.TabIndex = 0;
+            // 
+            // btnConfig
+            // 
+            this.btnConfig.Location = new System.Drawing.Point(62, 1);
+            this.btnConfig.Name = "btnConfig";
+            this.btnConfig.Size = new System.Drawing.Size(51, 23);
+            this.btnConfig.TabIndex = 6;
+            this.btnConfig.Text = "Config";
+            this.btnConfig.UseVisualStyleBackColor = true;
+            this.btnConfig.Click += new System.EventHandler(this.btnConfig_Click);
             // 
             // btnDirectoryWatcher
             // 
-            this.btnDirectoryWatcher.Location = new System.Drawing.Point(13, 1);
+            this.btnDirectoryWatcher.Location = new System.Drawing.Point(4, 1);
             this.btnDirectoryWatcher.Name = "btnDirectoryWatcher";
-            this.btnDirectoryWatcher.Size = new System.Drawing.Size(75, 23);
+            this.btnDirectoryWatcher.Size = new System.Drawing.Size(51, 23);
             this.btnDirectoryWatcher.TabIndex = 4;
             this.btnDirectoryWatcher.Text = "Watch";
             this.btnDirectoryWatcher.UseVisualStyleBackColor = true;
@@ -772,7 +832,7 @@ namespace ServicesInforCollector
             this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmMain";
-            this.Text = "Windows Services Information Collector  Ver 0.1.120";
+            this.Text = "Windows Services Information Collector  Ver 0.1.122";
             this.Load += new System.EventHandler(this.FrmMain_Load);
             this.tabControl1.ResumeLayout(false);
             this.tbWmi.ResumeLayout(false);
@@ -783,6 +843,7 @@ namespace ServicesInforCollector
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             this.tpText.ResumeLayout(false);
+            this.tpTree.ResumeLayout(false);
             this.panel13.ResumeLayout(false);
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
@@ -800,6 +861,7 @@ namespace ServicesInforCollector
             this.tabControl2.ResumeLayout(false);
             this.tpTextOut.ResumeLayout(false);
             this.tpTextOut.PerformLayout();
+            this.tpDiagram.ResumeLayout(false);
             this.panel11.ResumeLayout(false);
             this.panel11.PerformLayout();
             this.panel14.ResumeLayout(false);
@@ -834,11 +896,6 @@ namespace ServicesInforCollector
 
         private System.Windows.Forms.Panel panel16;
         private System.Windows.Forms.Panel panel19;
-        private System.Windows.Forms.TabControl tcMain;
-        private System.Windows.Forms.TabPage tpText;
-        private System.Windows.Forms.RichTextBox rtbOut;
-        private System.Windows.Forms.TabPage tpGrid;
-        private SortableGridView dataGridView1;
         private System.Windows.Forms.Panel panel13;
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Label label6;
@@ -877,6 +934,16 @@ namespace ServicesInforCollector
         private System.Windows.Forms.TabPage tpDiagram;
         private System.Windows.Forms.TextBox tbExclude;
         private System.Windows.Forms.Button btnClearFilter;
+        private System.Windows.Forms.Button btnConfig;
+        private System.Windows.Forms.TabControl tcMain;
+        private System.Windows.Forms.TabPage tpGrid;
+        private System.Windows.Forms.TabPage tpText;
+        private WmiSumInfo wmiSumInfo1;
+        private SortableGridView dataGridView1;
+        private JsonTree jsonTree1;
+        private System.Windows.Forms.RichTextBox rtbOut;
+        private System.Windows.Forms.TabPage tpTree;
+        private JsonTree jsonTree2;
     }
 }
 

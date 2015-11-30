@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{15BCCA58-BCBA-4C13-B401-B58A9796D807}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GininDev.Common.DataTools</RootNamespace>
+    <AssemblyName>GininDev.Common.DataTools</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CustTypes\SortableList.cs" />
+    <Compile Include="DynLoader\Core\TiFieldAttribute.cs" />
+    <Compile Include="DynLoader\Core\TiFieldLength.cs" />
+    <Compile Include="DynLoader\Core\TiTableAttribute.cs" />
+    <Compile Include="DynLoader\Core\TiType.cs" />
+    <Compile Include="DynLoader\DataFactory.cs" />
+    <Compile Include="DynLoader\Plugin\ItDataHelper.cs" />
+    <Compile Include="DynLoader\Plugin\SqlDataProvider.cs" />
+    <Compile Include="DynLoader\Plugin\SqlHelper.cs" />
+    <Compile Include="DynLoader\Plugin\SqlSchemaType.cs" />
+    <Compile Include="DynLoader\Utils\EntUtils.cs" />
+    <Compile Include="Entities\WmiServiceObj.cs" />
+    <Compile Include="Helpers\ConfigHelper.cs" />
+    <Compile Include="Helpers\ConfigTool\AppConfig.cs" />
+    <Compile Include="Helpers\ConfigTool\ConfigManager.cs" />
+    <Compile Include="Helpers\ConfigTool\ConfigTypes.cs" />
+    <Compile Include="Helpers\ConfigTool\IConfig.cs" />
+    <Compile Include="Helpers\ConfigTool\TemplatesConfig.cs" />
+    <Compile Include="Helpers\ConvertData.cs" />
+    <Compile Include="Helpers\DictionaryHelper.cs" />
+    <Compile Include="Helpers\FileHelper.cs" />
+    <Compile Include="Helpers\IniDocumentHelper.cs" />
+    <Compile Include="Helpers\LogHelper.cs" />
+    <Compile Include="Helpers\MessagerHelper.cs" />
+    <Compile Include="Helpers\RegexHelper.cs" />
+    <Compile Include="Helpers\ShellHelper.cs" />
+    <Compile Include="Helpers\StringHelper.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\AST\Element.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\AST\Expression.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\AST\FCall.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\AST\FieldAccess.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\AST\IntLiteral.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\AST\Name.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\AST\StringExpression.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\AST\StringLiteral.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\AST\Tag.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\AST\TagAttribute.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\AST\TagClose.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\AST\TagIf.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\AST\Text.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\ParseException.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\TagParser.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\TemplateLexer.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\TemplateParser.cs" />
+    <Compile Include="Helpers\TemplateTool\Parser\Token.cs" />
+    <Compile Include="Helpers\TemplateTool\Settings_user.cs" />
+    <Compile Include="Helpers\TemplateTool\Template.cs" />
+    <Compile Include="Helpers\TemplateHelper.cs" />
+    <Compile Include="Helpers\TemplateTool\TemplateRuntimeException.cs" />
+    <Compile Include="Helpers\TemplateTool\TestProgram.cs" />
+    <Compile Include="Helpers\TemplateTool\Util.cs" />
+    <Compile Include="Helpers\TemplateTool\VariableScope.cs" />
+    <Compile Include="Helpers\WinServicesHelper.cs" />
+    <Compile Include="Helpers\WorkThreadHelper.cs" />
+    <Compile Include="Helpers\XmlHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="TestFixture\TemplateHelperTest.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

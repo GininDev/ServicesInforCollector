@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicesInforCollector2008", "ServicesInforCollector\ServicesInforCollector2008.csproj", "{0FCEEBD8-8847-4F5F-8FA9-B86514087A47}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GininDev.Common.DataTools", "GininDev.Common.DataTools\GininDev.Common.DataTools.csproj", "{15BCCA58-BCBA-4C13-B401-B58A9796D807}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicesInforCollector.DataProviders", "ServicesInforCollector.DataProviders\ServicesInforCollector.DataProviders.csproj", "{D865C846-84A1-49B6-8CA8-DBFC77EE7B3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +17,14 @@ Global
 		{0FCEEBD8-8847-4F5F-8FA9-B86514087A47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FCEEBD8-8847-4F5F-8FA9-B86514087A47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FCEEBD8-8847-4F5F-8FA9-B86514087A47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15BCCA58-BCBA-4C13-B401-B58A9796D807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15BCCA58-BCBA-4C13-B401-B58A9796D807}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15BCCA58-BCBA-4C13-B401-B58A9796D807}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15BCCA58-BCBA-4C13-B401-B58A9796D807}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D865C846-84A1-49B6-8CA8-DBFC77EE7B3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D865C846-84A1-49B6-8CA8-DBFC77EE7B3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D865C846-84A1-49B6-8CA8-DBFC77EE7B3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D865C846-84A1-49B6-8CA8-DBFC77EE7B3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

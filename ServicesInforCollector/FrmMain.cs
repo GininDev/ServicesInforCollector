@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -9,17 +11,31 @@ using System.ServiceProcess;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using GininDev.Common.DataTools.CustTypes;
+using GininDev.Common.DataTools.DynLoader;
+using GininDev.Common.DataTools.Entities;
+using GininDev.Common.DataTools.Helpers;
+using GininDev.Common.DataTools.Helpers.ConfigTool;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ServicesInforCollector.Core.Components;
-using ServicesInforCollector.Core.Entities;
+using ServicesInforCollector.Core.Controller;
 using ServicesInforCollector.Core.Events;
-using ServicesInforCollector.Core.Helpers;
+using ServicesInforCollector.UiControls;
 
 namespace ServicesInforCollector
 {
     public partial class FrmMain : Form
     {
+        /// <summary>
+        /// 数据存储类型名
+        /// </summary>
+        private const string DbType = "System.Data.SQLite";
+        /// <summary>
+        /// 数据库文件配置名
+        /// </summary>
+        private const string DbConfigKey = "DbName";
+
+
         private static SortableList<WmiServiceObj> _arBiz;
 
 
@@ -87,55 +103,50 @@ namespace ServicesInforCollector
         }
 
         /// <summary>
-        /// 重新绑定数据
+        ///     重新绑定数据到gridview或者textbox
         /// </summary>
         /// <param name="bRebind"></param>
         private void BindBiz(bool bRebind)
         {
-            if (tcMain.SelectedIndex == 0)
+            this.wmiSumInfo1.Size = new Size(tcMain.SelectedIndex == 0? 180 : 2, 345);
+            
+            switch (tcMain.SelectedIndex)
             {
-                if (dataGridView1.DataSource == null || bRebind)
-                {
-                    if (_arBiz != null) SetGridViewData(dataGridView1, _arBiz.ToList());
-                    foreach (DataGridViewColumn acol in dataGridView1.Columns)
+                case 0:
+                    if (dataGridView1.DataSource == null || bRebind)
                     {
-                        acol.SortMode = DataGridViewColumnSortMode.Automatic;
-                    }                    
-                }
+                        if (_arBiz != null) SetGridViewData(dataGridView1, _arBiz.ToList());
+                        foreach (DataGridViewColumn acol in dataGridView1.Columns)
+                        {
+                            acol.SortMode = DataGridViewColumnSortMode.Automatic;
+                        }
+                    }
+                    
+                    break;
+                case 2:
+                    string sTreeContent = StringHelper.SeriaString(_arBiz);
+                    var objTree = (JToken)JsonConvert.DeserializeObject(sTreeContent);
+                    jsonTree2.DataBoundItem = objTree;
 
-            }
-            else
-            {
-                if (rtbOut.Text == "" || !bRebind)
-                {
-                    string sers = SeriaString(_arBiz);
-                    rtbOut.AppendText(sers);
-                    rtbOut.AppendText("\r\n");                    
-                }
+                    break;
+                default:
+                    if (_arBiz == null || _arBiz.Count == 0)
+                    {
+                        MessagerHelper.Info("No Data!");
+                    }
+                    else
+                    {
+                        rtbOut.Clear();
+                        string sers = StringHelper.SeriaString(_arBiz);
+                        rtbOut.AppendText(sers);
+                    }
+                    break;
             }
         }
 
         private void BindBiz()
         {
             BindBiz(false);
-        }
-
-        /// <summary>
-        ///     序列化对象
-        /// </summary>
-        /// <param name="objA"></param>
-        /// <returns></returns>
-        public static string SeriaString(object objA)
-        {
-            var sw = new StringWriter();
-            var jser = new JsonSerializer {ReferenceLoopHandling = ReferenceLoopHandling.Ignore};
-            using (JsonWriter jsonWriter = new JsonTextWriter(sw))
-            {
-                jsonWriter.Formatting = Formatting.Indented;
-                jser.Serialize(jsonWriter, objA);
-            }
-            string sers = sw.ToString();
-            return sers;
         }
 
 
@@ -239,11 +250,19 @@ namespace ServicesInforCollector
         {
             var dgv = (DataGridView) sender;
             if (dgv == null || dgv.Rows.Count <= 0) return;
+
+            var objRHStyle = new DataGridViewCellStyle();
+            objRHStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridView1.RowHeadersDefaultCellStyle = objRHStyle;
+            dataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+
             for (int i = 0; i < dgv.RowCount; i++)
             {
                 DataGridViewRow aitem = dgv.Rows[i];
                 object obj = aitem.DataBoundItem;
                 var objz = (WmiServiceObj) obj;
+
+                //aitem.HeaderCell.Value = objz.OrderNo.ToString();
 
                 if (_arSyses.Contains(objz.ExeName))
                 {
@@ -268,9 +287,38 @@ namespace ServicesInforCollector
                     for (int j = 0; j < dgv.ColumnCount; j++)
                     {
                         DataGridViewCellStyle clStyle = aitem.Cells[j].Style;
-                        clStyle.BackColor = Color.Gray;
-                        clStyle.ForeColor = Color.White;
+                        clStyle.BackColor = Color.DarkGray;
+                        clStyle.ForeColor = Color.Blue;
                     }
+                }
+            }
+        }
+
+        private void dataGridView1_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            // Do not automatically paint the focus rectangle.
+            e.PaintParts &= ~DataGridViewPaintParts.Focus;
+
+            // Determine whether the cell should be painted
+            // with the custom selection background.
+            if ((e.State & DataGridViewElementStates.Selected) == DataGridViewElementStates.Selected)
+            {
+                // Calculate the bounds of the row.
+                Rectangle rowBounds = new Rectangle(
+                    this.dataGridView1.RowHeadersWidth, e.RowBounds.Top,
+                    this.dataGridView1.Columns.GetColumnsWidth(
+                        DataGridViewElementStates.Visible) -
+                    this.dataGridView1.HorizontalScrollingOffset + 1,
+                    e.RowBounds.Height);
+
+                // Paint the custom selection background.
+                using (Brush backbrush =
+                    new System.Drawing.Drawing2D.LinearGradientBrush(rowBounds,
+                        this.dataGridView1.DefaultCellStyle.SelectionBackColor,
+                        e.InheritedRowStyle.ForeColor,
+                        System.Drawing.Drawing2D.LinearGradientMode.Horizontal))
+                {
+                    e.Graphics.FillRectangle(backbrush, rowBounds);
                 }
             }
         }
@@ -299,7 +347,6 @@ namespace ServicesInforCollector
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -316,7 +363,7 @@ namespace ServicesInforCollector
 
             switch (itemNumber)
             {
-                case "0":   //add filter
+                case "0": //add filter
                     List<string> arNew;
                     if (AddSkip(arSelected, out arNew))
                     {
@@ -335,7 +382,7 @@ namespace ServicesInforCollector
                     }
 
                     break;
-                case "1":   // service stop
+                case "1": // service stop
                     ShellStopHelper(arSelected, out arOpts);
 
                     if (arOpts != null)
@@ -350,12 +397,12 @@ namespace ServicesInforCollector
                         }
                     }
                     break;
-                case "2":       //service start
+                case "2": //service start
                     foreach (DataGridViewRow dsvc in arSelected)
                     {
                         object obj = dsvc.DataBoundItem;
                         var objz = (WmiServiceObj) obj;
-                        bool aRet = ShellHelper.SwitchServiceStatusTo(objz, ServiceControllerStatus.Running, _arBiz);
+                        bool aRet = ShellHelper.SwitchServiceStatusTo(objz, ServiceControllerStatus.Running);
 
                         if (arOpts == null)
                             arOpts = new List<string>();
@@ -373,7 +420,7 @@ namespace ServicesInforCollector
                         }
                     }
                     break;
-                case "3":   //explorer to
+                case "3": //explorer to
                     if (arSelected.Count > 0)
                     {
                         object abi = arSelected[0].DataBoundItem;
@@ -382,7 +429,7 @@ namespace ServicesInforCollector
                     }
 
                     break;
-                case "5":   //delete service
+                case "5": //delete service
                     if (MessagerHelper.Info("Are You Sure ? Deleted!", true) == DialogResult.Yes)
                     {
                         foreach (
@@ -428,7 +475,7 @@ namespace ServicesInforCollector
                 {
                     object obj = dsvc.DataBoundItem;
                     var objz = (WmiServiceObj) obj;
-                    bool aRet = ShellHelper.SwitchServiceStatusTo(objz, ServiceControllerStatus.Stopped, _arBiz);
+                    bool aRet = ShellHelper.SwitchServiceStatusTo(objz, ServiceControllerStatus.Stopped);
 
                     if (arOpts == null)
                         arOpts = new List<string>();
@@ -457,12 +504,14 @@ namespace ServicesInforCollector
 
                         if (arSelected[iPoint].Cells.Count > 1)
                         {
-                            device[j] = new WorkThread(arSelected[iPoint].Cells[2], _arBiz);
+                            var obj = arSelected[iPoint];
+                            var objTmp = (WmiServiceObj) obj.DataBoundItem;
+                            device[j] = new WorkThread(objTmp);
                             ThreadPool.QueueUserWorkItem(device[j].ThreadPoolCallBack);
                         }
                     }
                 }
-                Console.WriteLine("Pls Wait for a moment......Current Time:" + DateTime.Now.ToLongTimeString());
+                Console.WriteLine("Pls Wait for a moment......Current Time:{0}", DateTime.Now.ToLongTimeString());
                 //
             }
         }
@@ -540,47 +589,56 @@ namespace ServicesInforCollector
         {
             string curPath = Environment.CurrentDirectory;
             string dataPath = string.Format("{0}{1}Data", curPath, Path.DirectorySeparatorChar);
-            if (!Directory.Exists(dataPath))
-                Directory.CreateDirectory(dataPath);
-
 
             string sName = string.Format("{0}_info_{1}.json", Environment.MachineName,
                 (DateTime.Now).ToString("yyyyMMddHHmmss"));
 
             string sFullName = string.Format("{0}{1}{2}", dataPath, Path.DirectorySeparatorChar, sName);
 
-            if (string.IsNullOrEmpty(rtbOut.Text))
+            var sOutText = string.Empty;
+            if (_arBiz == null)
             {
                 MessagerHelper.Info("Content is null, Do nothing");
                 return;
             }
-
-            FileHelper.WriteDataFile(sFullName, rtbOut.Text);
-
-            DialogResult objDr =
-                MessagerHelper.Info(
-                    string.Format("results saved to file：{0}\nview or not?", sFullName), true);
-            if (objDr == DialogResult.Yes)
+            else
             {
-                ShellHelper.NotepadFile(sFullName);
+                string sers = StringHelper.SeriaString(_arBiz);
+                if (string.IsNullOrEmpty(sers))
+                {
+                    MessagerHelper.Info("Content is null, Do nothing");
+                    return;
+                }
+                else
+                {
+                    FileHelper.WriteDataFile(sFullName, sers);
+
+                    DialogResult objDr =
+                        MessagerHelper.Info(
+                            string.Format("results saved to file：{0}\nview or not?", sFullName), true);
+                    if (objDr == DialogResult.Yes)
+                    {
+                        ShellHelper.NotepadFile(sFullName);
+                    }
+                }
             }
         }
 
 
         private void btnDirectoryWatcher_Click(object sender, EventArgs e)
         {
-            var cursPre = this.Cursor;
-
-            Cursor = Cursors.WaitCursor;
+            Cursor cursPre = Cursor;
             string sDir = tbDirecotry.Text;
 
             var di = new DirectoryInfo(sDir);
             if (!Directory.Exists(sDir))
             {
                 MessagerHelper.Info(string.Format("Directory {0} not exists", sDir));
+
                 return;
             }
 
+            Cursor = Cursors.WaitCursor;
             var arResu = new Dictionary<string, Dictionary<string, object>>();
             DirectoryInfo[] arX = di.GetDirectories();
             foreach (DirectoryInfo adi in arX)
@@ -647,6 +705,10 @@ namespace ServicesInforCollector
 
         private void btnFolderView_Click(object sender, EventArgs e)
         {
+            if (!string.IsNullOrEmpty(tbDirecotry.Text))
+            {
+                fbdPros.SelectedPath = tbDirecotry.Text;
+            }
             DialogResult objRe = fbdPros.ShowDialog();
             if (objRe == DialogResult.OK)
             {
@@ -778,13 +840,82 @@ namespace ServicesInforCollector
             }
         }
 
-        private void tbDirectoryOut_KeyUp_1(object sender, KeyEventArgs e)
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
-            var obj = e.KeyValue;
-            if (e.Control && obj == 65) //Ctrl + A
+            DataGridViewSelectedRowCollection arSels = dataGridView1.SelectedRows;
+            if (arSels != null && arSels.Count > 0)
             {
-                this.tbDirectoryOut.SelectAll();
+                DataGridViewRow lastSel = arSels[arSels.Count - 1];
+                var objX = (WmiServiceObj) lastSel.DataBoundItem;
+                if (objX != null)
+                    wmiSumInfo1.DataBoundItem = objX;
             }
+        }
+
+        private void tabControl2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl2.SelectedIndex == 1 && !string.IsNullOrEmpty(tbDirectoryOut.Text))
+            {
+                string sJonsText = tbDirectoryOut.Text;
+                var objTree = (JToken) JsonConvert.DeserializeObject(sJonsText);
+                jsonTree1.DataBoundItem = objTree;
+
+                string x = string.Empty;
+            }
+        }
+
+        private void btnConfig_Click(object sender, EventArgs e)
+        {
+            var obj = DictController.Instance.GetPara("CompName");
+            var arFacts = FactController.Instance.GetFactses();
+            var arBizs = BizController.Instance.GetFactses();
+            var arSys = SysDefineController.Instance.GetFactses();
+
+
+
+            string sResult;
+
+            Cursor cursPre = Cursor;
+
+            /*
+            Cursor = Cursors.WaitCursor;
+            string sDir = tbDirecotry.Text;
+
+            var di = new DirectoryInfo(sDir);
+            if (!Directory.Exists(sDir))
+            {
+                MessagerHelper.Info(string.Format("Directory {0} not exists", sDir));
+                return;
+            }
+
+            var arResu = new Dictionary<string, Dictionary<string, object>>();
+            DirectoryInfo[] arX = di.GetDirectories();
+            foreach (DirectoryInfo adi in arX)
+            {
+                //Dictionary<string, object> objT = ConfigHelper.GetDirConfigs(adi);
+                //arResu.Add(adi.Name, objT);
+            }
+            //StringWriter sw = FileHelper.JsonWriter(arResu);
+            //tbDirectoryOut.Text = sw.ToString();
+
+            Cursor = cursPre;
+             */
+        }
+
+        private static bool OpenConnection(IDbConnection cnn)
+        {
+            var sDbFile = ConfigManager.GetConfig(ConfigTypes.AppConfig).NormalGet(DbConfigKey);
+
+            if (!File.Exists(sDbFile))
+                return true;
+
+            if (cnn == null)
+                return true;
+
+            cnn.ConnectionString = string.Format("Data Source={0}", sDbFile);
+            cnn.Open();
+
+            return cnn.State != ConnectionState.Open;
         }
     }
 }
